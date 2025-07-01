@@ -2,7 +2,7 @@ const PlayerSchema = require('../schemas/Player')
 const mongoose = require('mongoose')
 
 
-const Player = mongoose.model("Player", PlayerSchema);
+const Player = require('../schemas/Player')
 
 module.exports.getAllPlayers = async () => {
     return await Player.find()

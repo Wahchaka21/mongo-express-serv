@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()   //Créé l'appli, méthode de express
 const mongoose = require('mongoose')
 const Player = require('./schemas/Player')
+const Product = require("./schemas/Product")
 
 
 main().catch(err => console.log(err))
@@ -74,7 +75,22 @@ app.get('/sorted/desc', async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: "Erreur serveur", details: err.message })
     }
-  })
+})
+
+//ajouter un produit grâce au schema Product
+app.post("/product", async (req, res) => {
+    try {
+        const product = new Product(req.body)
+        const savedProduit = await product.save()
+        res.status(201).json(savedProduit)
+    } catch (err) {
+        res.status(400).json({
+            error: "Impossible d'ajouter le produit",
+            details: err.message
+        })
+    }
+})
+
 
 app.post('/player', (req, res) => {     //Crée une route HTTP POST accessible à l’URL /player
     let player_to_add = req.body
@@ -170,7 +186,8 @@ let checkPlayerGael = function(player) {
         //que score existe et que sa value est un nombre
         && typeof player.score === "number"
         //qu'il y a bien que deux clés
-        && players.keys === 2)
+        && players.keys === 2
+    )
 }
 
 // Le app.post qui marchait avec mon check player
