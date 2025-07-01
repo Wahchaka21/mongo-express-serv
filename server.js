@@ -3,6 +3,7 @@ const app = express()   //Créé l'appli, méthode de express
 const mongoose = require('mongoose')
 const Player = require('./schemas/Player')
 const Product = require("./schemas/Product")
+const Maillot = require("./schemas/Maillot")
 
 
 main().catch(err => console.log(err))
@@ -91,6 +92,16 @@ app.post("/product", async (req, res) => {
     }
 })
 
+
+//utiliser populate() pour "joindre"
+app.get("/players/maillot", async (req, res) => {
+    try {
+        const maillots = await Maillot.find().populate("proprio")
+        res.json(maillots)
+    } catch (err) {
+        res.status(500).json({error: "Erreur serveur", details: err.message})
+    }
+})
 
 app.post('/player', (req, res) => {     //Crée une route HTTP POST accessible à l’URL /player
     let player_to_add = req.body
